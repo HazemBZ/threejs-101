@@ -2,6 +2,7 @@ import {
   BoxGeometry,
   CircleGeometry,
   ConeGeometry,
+  MathUtils,
   Mesh,
   MeshBasicMaterial,
   MeshStandardMaterial,
@@ -21,9 +22,31 @@ function createCube() {
   const cube = new Mesh(geometry, material)
 
   cube.rotation.set(-0.5, -0.1, 0.8)
+  const radiansPerSecond = MathUtils.degToRad(60)
+  cube.direction = 1
+  cube.rotDirection = 1
+
+  // Monkey patching
+  cube.tick = delta => {
+    const radiansPerFrame = radiansPerSecond * delta
+
+    cube.rotation.x += radiansPerFrame * cube.rotDirection // 1 rad === 0.5 deg --> 60×0.5=30 deg/sec
+    // cube.rotation.y += radiansPerFrame
+    // cube.rotation.z += radiansPerFrame
+
+    cube.position.x += 1 * delta * cube.direction
+
+    console.log(document.body.clientHeight)
+
+    console.log(cube.rotation.x)
+    if (MathUtils.degToRad(180) < cube.rotation.x) cube.rotDirection = -1
+    if (MathUtils.degToRad(0) > cube.rotation.x) cube.rotDirection = 1
+
+    if (cube.position.x >= 5) cube.direction = -1
+    if (cube.position.x <= -5) cube.direction = 1
+  }
 
   return cube
 }
 
 export { createCube }
-;('')

@@ -1,14 +1,11 @@
-import World from "./World";
+import World from './World'
 
 function main() {
+  const container = document.querySelector('#scene-container')
 
-const container = document.querySelector("#scene-container")
+  const world = new World(container)
 
-const world = new World(container)
-
-
-world.render()
-
+  world.start()
 }
 
 main()

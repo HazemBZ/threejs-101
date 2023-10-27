@@ -33,3 +33,16 @@ h1 {
   */
   background-color: skyblue;
 }
+
+
+#controls {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background-color: bisque;
+  padding: 5px;
+  z-index: 10;
+}
