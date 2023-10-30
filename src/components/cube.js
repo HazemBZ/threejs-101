@@ -7,17 +7,35 @@ import {
   MeshBasicMaterial,
   MeshStandardMaterial,
   SphereGeometry,
+  TextureLoader,
 } from 'three'
+
+function createMaterial() {
+  const textureLoader = new TextureLoader()
+  const texture = textureLoader.load('/assets/textures/grass.png')
+  texture.center.set(1, 1)
+
+  const spec = {
+    color: 'chocolate',
+    map: texture, // color map
+    // bumpMap: texture,
+    // roughnessMap: texture,
+    // alphaMap: texture,
+    // transparent: true,
+  }
+
+  const material = new MeshStandardMaterial(spec) // Affected ny lighting
+  console.info(texture)
+  return material
+}
 
 // TODO: MeshBasicMaterial and MeshStandardMaterial are not the only materials available. There are a total of eighteen materials in the three.js core, and any material with the word “mesh” in its name will work with our cube mesh. Test some of these out
 
 function createCube() {
   const geometry = new BoxGeometry(2, 2, 2)
   //   const material = new MeshBasicMaterial()
-  const spec = {
-    color: 'chocolate',
-  }
-  const material = new MeshStandardMaterial(spec) // Affected ny lighting
+
+  const material = createMaterial()
 
   const cube = new Mesh(geometry, material)
 
