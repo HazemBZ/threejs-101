@@ -1,12 +1,10 @@
-import { Color, Scene } from "three";
-
+import { Color, Scene } from 'three'
 
 function createScene() {
-    const scene = new Scene()
+  const scene = new Scene()
 
-    scene.background = new Color('chartreuse')
-    return scene
+  scene.background = new Color('skyblue')
+  return scene
 }
 
-
-export {createScene}
+export { createScene }
