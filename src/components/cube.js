@@ -10,9 +10,11 @@ import {
   TextureLoader,
 } from 'three'
 
-function createMaterial() {
+function createMaterial(onLoad = () => {}) {
   const textureLoader = new TextureLoader()
-  const texture = textureLoader.load('/assets/textures/grass.png')
+
+  textureLoader.onLoad = () => onLoad()
+  const texture = textureLoader.load('/assets/textures/grass.png', onLoad)
   texture.center.set(1, 1)
 
   const spec = {
@@ -31,11 +33,11 @@ function createMaterial() {
 
 // TODO: MeshBasicMaterial and MeshStandardMaterial are not the only materials available. There are a total of eighteen materials in the three.js core, and any material with the word “mesh” in its name will work with our cube mesh. Test some of these out
 
-function createCube() {
+function createCube(onLoad = () => {}) {
   const geometry = new BoxGeometry(2, 2, 2)
   //   const material = new MeshBasicMaterial()
 
-  const material = createMaterial()
+  const material = createMaterial(onLoad)
 
   const cube = new Mesh(geometry, material)
 

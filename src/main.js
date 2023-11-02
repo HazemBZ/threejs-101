@@ -5,7 +5,8 @@ function main() {
 
   const world = new World(container)
 
-  world.start()
+  // world.start()
+  world.render()
 }
 
 main()

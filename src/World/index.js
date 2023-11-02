@@ -15,6 +15,7 @@ let camera
 let scene
 let renderer
 let loop
+let controls
 
 class World {
   constructor(container) {
@@ -26,7 +27,7 @@ class World {
 
     container.append(renderer.domElement)
 
-    const cube = createCube()
+    const cube = createCube(this.render)
     const lights = createLights()
 
     // Stop rotation
@@ -34,12 +35,23 @@ class World {
 
     scene.add(cube, lights)
 
-    const controls = createControls(camera, renderer.domElement)
+    camera.position.set(1, 0, -10) // This updated should be set before controls creation
+    controls = createControls(camera, renderer.domElement)
+
+    controls.addEventListener('change', () => {
+      this.render()
+    })
+
+    // camera.position.set(0, 0, 0) //
     controls.target.copy(cube.position)
     controls.enableDamping = true // make the controls feel more realistic (intertia)
     controls.dumpingFactor = 10
 
-    loop.updatables.push(controls)
+    // Deprecated
+    // loop.updatables.push(controls)
+
+    // camera.rotation.set(-10, -2, -2) // always ppoints to target (so only seems not working)
+    // camera.position.set(-1, 0, -10)
 
     const resizer = new Resizer(container, camera, renderer)
 
