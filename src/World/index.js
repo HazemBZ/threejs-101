@@ -7,6 +7,7 @@ import { createLights } from '../components/light'
 import Loop from '../systems/Loop'
 
 import { createControls } from '../systems/controls'
+import { AmbientLight, HemisphereLight } from 'three'
 
 // TODO: Recreate this scene: https://discoverthreejs.com/book/first-steps/physically-based-rendering/#lighting-and-depth
 
@@ -30,13 +31,13 @@ class World {
     const cube = createCube(this.render)
     const lights = createLights()
 
-    // Stop rotation
-    // loop.updatables.push(cube)
-
-    scene.add(cube, lights)
-
-    camera.position.set(1, 0, -10) // This updated should be set before controls creation
     controls = createControls(camera, renderer.domElement)
+    camera.position.set(1, 0, -10) // This updated should be set before controls creation
+
+    // Stop rotation
+    loop.updatables.push(controls)
+
+    scene.add(cube, ...lights)
 
     controls.addEventListener('change', () => {
       this.render()
@@ -46,6 +47,11 @@ class World {
     controls.target.copy(cube.position)
     controls.enableDamping = true // make the controls feel more realistic (intertia)
     controls.dumpingFactor = 10
+
+    controls.autoRotate = true
+    controls.autoRotateSpeed = 1
+
+    controls.listenToKeyEvents(window)
 
     // Deprecated
     // loop.updatables.push(controls)
