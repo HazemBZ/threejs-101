@@ -1,13 +1,12 @@
 import { createCamera } from '../components/camera'
 import { createScene } from '../components/scene'
 import { createRenderer } from '../systems/renderer'
-import { createCube } from '../components/cube'
+import { createMeshGroup } from '../components/meshGroup'
 import Resizer from '../systems/Resizer'
 import { createLights } from '../components/light'
 import Loop from '../systems/Loop'
 
 import { createControls } from '../systems/controls'
-import { AmbientLight, HemisphereLight } from 'three'
 
 // TODO: Recreate this scene: https://discoverthreejs.com/book/first-steps/physically-based-rendering/#lighting-and-depth
 
@@ -28,36 +27,18 @@ class World {
 
     container.append(renderer.domElement)
 
-    const cube = createCube(this.render)
+    const meshGroup = createMeshGroup()
     const lights = createLights()
-
     controls = createControls(camera, renderer.domElement)
-    camera.position.set(1, 0, -10) // This updated should be set before controls creation
+
+    console.log('rot', camera.rotation)
 
     // Stop rotation
-    loop.updatables.push(controls)
+    loop.updatables.push(controls, meshGroup)
 
-    scene.add(cube, ...lights)
+    // controls
 
-    controls.addEventListener('change', () => {
-      this.render()
-    })
-
-    // camera.position.set(0, 0, 0) //
-    controls.target.copy(cube.position)
-    controls.enableDamping = true // make the controls feel more realistic (intertia)
-    controls.dumpingFactor = 10
-
-    controls.autoRotate = true
-    controls.autoRotateSpeed = 1
-
-    controls.listenToKeyEvents(window)
-
-    // Deprecated
-    // loop.updatables.push(controls)
-
-    // camera.rotation.set(-10, -2, -2) // always ppoints to target (so only seems not working)
-    // camera.position.set(-1, 0, -10)
+    scene.add(meshGroup, ...lights)
 
     const resizer = new Resizer(container, camera, renderer)
 
