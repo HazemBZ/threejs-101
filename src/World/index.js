@@ -6,9 +6,8 @@ import { createLights } from '../components/light'
 import Loop from '../systems/Loop'
 
 import { createControls } from '../systems/controls'
-import { AxesHelper, GridHelper, Group } from 'three'
-import Train from '../Train'
-import { degToRad } from 'three/src/math/MathUtils'
+import { AxesHelper, GridHelper, Vector3 } from 'three'
+import { loadBirds } from '../components/birds'
 
 // TODO: Recreate this scene: https://discoverthreejs.com/book/first-steps/physically-based-rendering/#lighting-and-depth
 
@@ -76,7 +75,7 @@ class World {
 
     // controls
 
-    scene.add(...lights, axesHelpers, gridHelper, trainsGroup)
+    scene.add(...lights, axesHelpers, gridHelper)
 
     const resizer = new Resizer(container, camera, renderer)
 
@@ -106,6 +105,16 @@ class World {
   stop() {
     loop.stop()
   }
+
+  async init() {
+    const { parrot, flamingo, stork } = await loadBirds()
+    parrot.scale.multiplyScalar(1 / 20)
+    flamingo.scale.multiplyScalar(1 / 20)
+    stork.scale.multiplyScalar(1 / 20)
+    scene.add(parrot, flamingo, stork)
+    controls.target.copy(stork.position)
+  }
+
 }
 
 export default World
