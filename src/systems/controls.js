@@ -7,7 +7,17 @@ function createControls(camera, canvas) {
 
   // controls.autoRotate = true
   // controls.autoRotateSpeed = 1
-  controls.tick = () => controls.update()
+
+  controls.lookTarget = camera.position
+
+  controls.tick = delta => {
+    if (!controls.target.equals(controls.lookTarget)) {
+      controls.target.x += (controls.lookTarget.x - controls.target.x) * delta * 1.5
+      controls.target.y += (controls.lookTarget.y - controls.target.y) * delta * 1.5
+      controls.target.z += (controls.lookTarget.z - controls.target.z) * delta * 1.5
+    }
+    controls.update()
+  }
 
   return controls
 }

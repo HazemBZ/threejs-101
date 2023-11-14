@@ -23,6 +23,7 @@ class World {
     camera = createCamera()
     scene = createScene()
     renderer = createRenderer()
+    this.focusTargets = []
 
     // Helpers
     const size = 40
@@ -30,38 +31,6 @@ class World {
 
     const axesHelpers = new AxesHelper(15)
     const gridHelper = new GridHelper(size, divisions)
-
-    const train = new Train()
-    let trains = [train]
-
-    const step = 1 / 10
-
-    for (let i = 0; i < 1; i += step) {
-      const trainCopy = train.clone()
-
-      const x = Math.cos(2 * Math.PI * i)
-      const z = Math.sin(2 * Math.PI * i)
-      console.log(x)
-      // trainCopy.rotation.x = x
-      console.log('---', i, '---')
-      console.log('bef:', trainCopy.rotation.y)
-      // trainCopy.rotation.y = -degToRad(360 * i) // look back
-      // trainCopy.rotation.y = -degToRad(360 * i + 180) // away
-      trainCopy.rotation.y = -degToRad(360 * i + 90) // perfect circle
-      console.log('aft:', trainCopy.rotation.y)
-      console.log('trainCopy.rotation.y ', trainCopy.rotation.y)
-      // trainCopy.rotation.y =
-      trainCopy.position.x = x * 10
-      trainCopy.position.z = z * 10
-      // trainCopy.add()
-      trains.push(trainCopy)
-    }
-    const trainsGroup = new Group()
-    trainsGroup.add(...trains)
-
-    trainsGroup.tick = delta => {
-      trainsGroup.rotation.y += (delta * Math.PI) / 4
-    }
 
     loop = new Loop(camera, scene, renderer)
 
@@ -71,7 +40,7 @@ class World {
     controls = createControls(camera, renderer.domElement)
 
     // Stop rotation
-    loop.updatables.push(controls, trainsGroup, ...trains)
+    loop.updatables.push(controls, camera)
 
     // controls
 
@@ -112,9 +81,31 @@ class World {
     flamingo.scale.multiplyScalar(1 / 20)
     stork.scale.multiplyScalar(1 / 20)
     scene.add(parrot, flamingo, stork)
+    this.focusTargets = [
+      { target: parrot.position, placement: [parrot.position.x + 10, parrot.position.y - 1, parrot.position.z + 5] },
+      {
+        target: flamingo.position,
+        placement: [flamingo.position.x - 10, flamingo.position.y, flamingo.position.z + 12],
+      },
+      {
+        target: stork.position,
+        placement: [stork.position.x + 15, stork.position.y, stork.position.z + 15],
+      },
+    ]
     controls.target.copy(stork.position)
   }
 
+  focusNext() {
+    const target = this.focusTargets.pop()
+    console.log(target)
+    this.focusTargets.unshift(target)
+
+    // camera.position.set(...target.placement)
+
+    camera.moveTarget = new Vector3(...target.placement)
+    // controls.target.copy(target.target)
+    controls.lookTarget = target.target
+  }
 }
 
 export default World
