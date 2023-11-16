@@ -18,7 +18,6 @@ async function loadBirds() {
     loader.loadAsync('/assets/models/Flamingo.glb'),
     loader.loadAsync('/assets/models/Stork.glb'),
   ])
-  console.log(parrotData)
 
   const parrot = setupModel(parrotData)
   const flamingo = setupModel(flamingoData)

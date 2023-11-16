@@ -81,6 +81,7 @@ class World {
     flamingo.scale.multiplyScalar(1 / 20)
     stork.scale.multiplyScalar(1 / 20)
     scene.add(parrot, flamingo, stork)
+
     this.focusTargets = [
       { target: parrot.position, placement: [parrot.position.x + 10, parrot.position.y - 1, parrot.position.z + 5] },
       {
@@ -93,6 +94,8 @@ class World {
       },
     ]
     controls.target.copy(stork.position)
+
+    loop.updatables.push(parrot, flamingo, stork)
   }
 
   focusNext() {
